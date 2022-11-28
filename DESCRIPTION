@@ -1,0 +1,24 @@
+Package: ClusterofCluster
+Type: Package
+Title: Cancer subtypes identification based on multiple genomic datasets
+Version: 1.0.0
+Author: c(
+    person(given = "Zhaopo", family = "Zhu",        email = "2931563708@qq.com",   role  = c("aut", "cre")),
+    person(given = "Guojun",      family = "Liu",      email = "gjliu77@qq.com",   role  = "ctb"))
+Maintainer: Zhaopo Zhu <2931563708@qq.com>
+Description: A multi-method is used to classify cancer subtypes and make the results more objective, accurate, and user-friendly. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.1
+Imports:
+    dplyr (>= 1.0),
+    tidyr,
+    ConsensusClusterPlus,
+    impute,
+    survival,
+    survminer,
+    limma,
+    RColorBrewer
+Depends: 
+    R (>= 2.10)

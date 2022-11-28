@@ -10,8 +10,8 @@ devtools::install_github("joanzz/CFC")
 This package mainly contains data preprocessing, clustering and visualization modules, 
 you can visit the  https://joanzz.github.io/CFC/ website to learn more about it.
 ## Contributer
-<a href="https://github.com/remarkablemark/html-react-parser/graphs/contributors">
-  <img src="https://opencollective.com/html-react-parser/contributors.svg?width=890&button=false">
+<a href="https://github.com/6guojun">
+  <img src="https://avatars.githubusercontent.com/u/28222642?v=4">
 </a>
 
 ## License

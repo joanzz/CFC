@@ -8,4 +8,4 @@ devtools::install_github("joanzz/CFC")
 ```
 ## Usage
 This package mainly contains data preprocessing, clustering and visualization modules, 
-you can visit the www website to learn more about it.
+you can visit the  https://joanzz.github.io/CFC/ website to learn more about it.

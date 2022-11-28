@@ -11,7 +11,7 @@ This package mainly contains data preprocessing, clustering and visualization mo
 you can visit the  https://joanzz.github.io/CFC/ website to learn more about it.
 ## Contributer
 <a href="https://github.com/6guojun">
-  <img src="https://avatars.githubusercontent.com/u/28222642?v=4">
+  <img src="https://avatars.githubusercontent.com/u/28222642?size=50">
 </a>
 
 ## License

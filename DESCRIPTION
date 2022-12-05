@@ -19,6 +19,11 @@ Imports:
     survival,
     survminer,
     limma,
-    RColorBrewer
+    RColorBrewer,
+    stringr,
+    org.Hs.eg.db,
+    GenomicRanges,
+    ChIPseeker,
+    TxDb.Hsapiens.UCSC.hg38.knownGene
 Depends: 
     R (>= 2.10)

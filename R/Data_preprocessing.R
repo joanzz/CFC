@@ -191,4 +191,36 @@ quantileNormalizeByFeature <- function(matrix_to_normalize,
   }
 }
 
-
+#' Convert to matrix
+#'
+#' CNV data into an expression matrix
+#' @importFrom GenomicRanges GRanges
+#' @import  TxDb.Hsapiens.UCSC.hg38.knownGene
+#' @importFrom ChIPseeker annotatePeak
+#' @import org.Hs.eg.db
+#' @importFrom stringr paste0
+#' @param CNV Copy number variation data
+#'
+#' @return A matrix
+#' @export
+#'
+#' @examples
+#' data(CNV)
+#' CNVmatrix <- cnvconverttomatrix(CNV)
+#'
+cnvconverttomatrix <-function(CNV){
+  pos = a
+  pos$Chrom = paste0("chr",pos$Chrom)
+  peak <- GRanges(sample = pos[,1],
+                  Segment_Mean = pos[,5],
+                  seqnames=Rle(pos[,2]),
+                  ranges=IRanges(pos[,3], pos[,4]),
+                  strand=rep(c("*"), nrow(pos)))
+  txdb=TxDb.Hsapiens.UCSC.hg38.knownGene
+  peakAnno <- annotatePeak(peak, tssRegion=c(-3000, 3000),
+                           TxDb=txdb, annoDb="org.Hs.eg.db")
+  pos_anno=as.data.frame(peakAnno)
+  pos_anno[1:6,c("sample","Segment_Mean","SYMBOL")]
+  matrix <- xtabs(Segment_Mean ~ SYMBOL +sample, pos_anno)
+  return(matrix)
+}

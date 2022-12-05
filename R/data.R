@@ -152,3 +152,27 @@ NULL
 #'@examples
 #' data(bortIndex)
 NULL
+
+#' Dataset: CNV
+#'
+#'Raw CNV data for bladder cancer downloaded in XENA
+#'
+#'@docType data
+#'@keywords datasets
+#'@format A dataset
+#'@name CNV
+#'@examples
+#' data(CNV)
+NULL
+
+#' Dataset: CNVmatrix
+#'
+#'A matrix transformed by CNV data
+#'
+#'@docType data
+#'@keywords datasets
+#'@format A matrix
+#'@name CNVmatrix
+#'@examples
+#' data(CNVmatrix)
+NULL

@@ -6,6 +6,8 @@
 #' @param mRNAexp A matrix of mRNA expression
 #' @param miRNAexp A matrix of miRNA expression
 #' @param lncRNAexp A matrix of lncRNA expression
+#' @param methylation A matrix of methylation
+#' @param CNVmatrix A matrix of Copy number variation
 #' @param maxK integer value. maximum cluster number  for Consensus Clustering Algorithm to evaluate.
 #' @param reps  integer value. number of subsamples(in other words, The iteration number of each cluster number)
 #' @param clusterAlg character value. cluster algorithm. 'hc' heirarchical (hclust), 'pam' for paritioning around medoids, 'km' for k-means upon data matrix, 'kmdist' for k-means upon distance matrices (former km option), or a function that returns a clustering.
@@ -27,6 +29,7 @@
 #'data(miRNAexp)
 #'data(lncRNAexp)
 #'data(methylation)
+#'data(CNVmatrix)
 #'mRNAexp=data.filter(mRNAexp,percentage=0.6)
 #'miRNAexp=data.filter(miRNAexp,percentage=0.6)
 #'lncRNAexp=data.filter(lncRNAexp,percentage=0.6)
@@ -39,9 +42,9 @@
 #'mRNAexp=data.imputation(mRNAexp,fun="knn")
 #'miRNAexp=data.imputation(miRNAexp,fun="knn")
 #'lncRNAexp=data.imputation(lncRNAexp,fun="knn")
-#'results = Cluster_of_cluster(mRNAexp,miRNAexp,lncRNAexp,methylation,maxK=6,reps=50,pItem=0.8,pFeature=1,clusterAlg="hc",distance="pearson",innerLinkage="complete",seed=1262118388.71279,plot="pdf")
+#'results = Cluster_of_cluster(mRNAexp,miRNAexp,lncRNAexp,methylation,CNVmatrix,maxK=6,reps=50,pItem=0.8,pFeature=1,clusterAlg="hc",distance="pearson",innerLinkage="complete",seed=1262118388.71279,plot="pdf")
 #'
-Cluster_of_cluster <- function(mRNAexp,miRNAexp,lncRNAexp,methylation,
+Cluster_of_cluster <- function(mRNAexp,miRNAexp,lncRNAexp,methylation,CNVmatrix,
                                maxK=6,reps=50,pItem=0.8,pFeature=1,# notice which maxK you set
                                clusterAlg="hc", ### "pam","hc","km"
                                distance="pearson",
@@ -126,11 +129,12 @@ Cluster_of_cluster <- function(mRNAexp,miRNAexp,lncRNAexp,methylation,
   title_met="methylation"
   rt_nor_met <- as.matrix(rt_met)
   results_met = ConsensusClusterPlus(rt_nor_met,maxK=maxK,reps=reps,pItem=pItem,pFeature=pFeature,# notice which maxK you set
-                                        clusterAlg=clusterAlg, ### "pam","hc","km"
-                                        distance=distance,
-                                        innerLinkage=innerLinkage,#implement consensus clustering with innerLinkage="complete".
-                                        seed=seed,
-                                        plot=plot)   # plot="png" will keep figure separately
+                                     clusterAlg=clusterAlg, ### "pam","hc","km"
+                                     distance=distance,
+                                     innerLinkage=innerLinkage,#implement consensus clustering with innerLinkage="complete".
+                                     seed=seed,
+                                     plot=plot)   # plot="png" will keep figure separately
+
   ### chunk 3   PAC implementation
   maxK_met = maxK  #
   Kvec_met = 2:maxK_met
@@ -144,12 +148,37 @@ Cluster_of_cluster <- function(mRNAexp,miRNAexp,lncRNAexp,methylation,
   }
   #The optimal K
   optK_met = Kvec_met[which.min(PAC_met)]
+  ###cnv
+  rt_cnv <- CNVmatrix
+  title_cnv=tempdir()
+  title_cnv="CNV"
+  rt_nor_cnv <- as.matrix(rt_cnv)
+  results_cnv = ConsensusClusterPlus(rt_nor_cnv,maxK=maxK,reps=reps,pItem=pItem,pFeature=pFeature,# notice which maxK you set
+                                     clusterAlg=clusterAlg, ### "pam","hc","km"
+                                     distance=distance,
+                                     innerLinkage=innerLinkage,#implement consensus clustering with innerLinkage="complete".
+                                     seed=seed,
+                                     plot=plot)   # plot="png" will keep figure separately
 
-  #
+  ### chunk 3   PAC implementation
+  maxK_cnv = maxK  #
+  Kvec_cnv = 2:maxK_cnv
+  x1 = 0.1; x2 = 0.9 # threshold defining the intermediate sub-interval
+  PAC_cnv = rep(NA,length(Kvec_cnv))
+  names(PAC_cnv) = paste("K=",Kvec_cnv,sep="") # from 2 to maxK
+  for(i in Kvec_cnv){
+    M = results_cnv[[i]]$consensusMatrix
+    Fn = ecdf(M[lower.tri(M)])
+    PAC_cnv[i-1] = Fn(x2) - Fn(x1)
+  }
+  #The optimal K
+  optK_cnv = Kvec_cnv[which.min(PAC_cnv)]
+  ####
   opt_mRNA=results_mRNA[[optK_mRNA]]["consensusClass"]
   opt_miRNA=results_miRNA[[optK_miRNA]]["consensusClass"]
   opt_lncRNA=results_lncRNA[[optK_lncRNA]]["consensusClass"]
   opt_met=results_met[[optK_met]]["consensusClass"]
+  opt_cnv=results_cnv[[optK_cnv]]["consensusClass"]
 
   #mRNA
   matrix_mRNA=as.data.frame(opt_mRNA)
@@ -205,19 +234,35 @@ Cluster_of_cluster <- function(mRNAexp,miRNAexp,lncRNAexp,methylation,
   }
   c_met = 1:optK_met
   colnames(cluster_met) = paste("methylation",c_met,sep="")
+  #cnv
+  matrix_cnv=as.data.frame(opt_cnv)
+  matrix_cnv$rowname=substr(rownames(matrix_cnv),1,15)
+  matrix_cnv$rowname=gsub("[.]","-",matrix_cnv$rowname)
+  matrix_cnv <- matrix_cnv[!duplicated(matrix_cnv$rowname),]
+  rownames(matrix_cnv)=matrix_cnv$rowname
+  cluster_cnv <- as.data.frame(matrix(0,length(row.names(matrix_cnv)),optK_cnv))
+  rownames(cluster_cnv)<-rownames(matrix_cnv)
+  for (i in 1:length(row.names(cluster_cnv))) {
+    cluster_cnv[i,matrix_met[i,1]]=1
+  }
+  c_cnv = 1:optK_cnv
+  colnames(cluster_cnv) = paste("methylation",c_cnv,sep="")
 
+  ###
   cluster_mRNA$rownames=row.names(cluster_mRNA)
   cluster_miRNA$rownames=row.names(cluster_miRNA)
   cluster_lncRNA$rownames=row.names(cluster_lncRNA)
   cluster_met$rownames=row.names(cluster_met)
+  cluster_cnv$rownames=row.names(cluster_cnv)
 
   m1 <- merge(cluster_mRNA, cluster_miRNA, by.x = "rownames", by.y = "rownames")
   m2<- merge(cluster_lncRNA, m1, by.x = "rownames", by.y = "rownames")
   m3<-merge(cluster_met, m2, by.x = "rownames", by.y = "rownames")
-  row.names(m3)=m3$rownames
-  m3=m3[,-1]
+  m4<-merge(cluster_cnv, m3, by.x = "rownames", by.y = "rownames")
+  row.names(m4)=m4$rownames
+  m4=m4[,-1]
   ####
-  rt_nor <- t(m3)
+  rt_nor <- t(m4)
   title=tempdir()
   title="Cluster_of_Cluster"
   rt_nor <- as.matrix(rt_nor)

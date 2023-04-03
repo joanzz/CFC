@@ -176,3 +176,75 @@ NULL
 #'@examples
 #' data(CNVmatrix)
 NULL
+
+#' Dataset: entr_expr
+#'
+#'a genome-wide expression vector of a sample with names labeling the genes (also annotated to entrez gene IDs) of same length as rows of adj.m.
+#'
+#'@docType data
+#'@keywords datasets
+#'@format A matrix
+#'@name entr_expr
+#'@examples
+#' data(entr_expr)
+NULL
+
+#' Dataset: entr_adja
+#'
+#'an adjacency matrix representing a connected PPI network, with rownames/colnames of the matrix annotated to Entrez gene IDs.
+#'
+#'@docType data
+#'@keywords datasets
+#'@format A matrix
+#'@name entr_adja
+#'@examples
+#' data(entr_adja)
+NULL
+
+#' Dataset: entr_labels
+#'
+#'Classification (label) of the sample
+#'
+#'@docType data
+#'@keywords datasets
+#'@format A matrix
+#'@name entr_labels
+#'@examples
+#' data(entr_labels)
+NULL
+
+#' Dataset: drugToCellLineDataCgp
+#'
+#'To map cell lines to .CEL file names
+#'
+#'@docType data
+#'@keywords datasets
+#'@format A matrix
+#'@name drugToCellLineDataCgp
+#'@examples
+#' data(drugToCellLineDataCgp)
+NULL
+
+#' Dataset: gdsc_brainarray_syms
+#'
+#'The gene expression data
+#'
+#'@docType data
+#'@keywords datasets
+#'@format A matrix
+#'@name gdsc_brainarray_syms
+#'@examples
+#' data(gdsc_brainarray_syms)
+NULL
+
+#' Dataset: drugSensitivityDataCgp
+#'
+#'The drug sensitivity data
+#'
+#'@docType data
+#'@keywords datasets
+#'@format A matrix
+#'@name drugSensitivityDataCgp
+#'@examples
+#' data(drugSensitivityDataCgp)
+NULL

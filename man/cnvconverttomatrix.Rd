@@ -10,7 +10,7 @@ cnvconverttomatrix(CNV)
 \item{CNV}{Copy number variation data}
 }
 \value{
-A matrix
+A CNV matrix.
 }
 \description{
 CNV data into an expression matrix

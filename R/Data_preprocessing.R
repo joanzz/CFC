@@ -149,7 +149,8 @@ data.normalization<-function(Data,type="feature_Median",log2=FALSE)
 
 #' Quantile Normalize By Feature
 #'
-#' A cross-platform normalization method using FSQN to improve comparability of DNA microarray and RNA-seq datasets
+#' A cross-platform normalization method using FSQN to improve comparability of DNA microarray and RNA-seq datasets.
+#'
 #' @importFrom preprocessCore normalize.quantiles.use.target
 #' @param matrix_to_normalize A matrix (m x n) with m samples as rows, and n features as columns.
 #' @param target_distribution_matrix matrix (m2 x n) with m2 samples as rows, and n features as columns to use as the target distribution.
@@ -195,13 +196,15 @@ quantileNormalizeByFeature <- function(matrix_to_normalize,
 #'
 #' CNV data into an expression matrix
 #' @importFrom GenomicRanges GRanges
+#' @importFrom IRanges IRanges
+#' @importFrom S4Vectors Rle
 #' @import  TxDb.Hsapiens.UCSC.hg38.knownGene
 #' @importFrom ChIPseeker annotatePeak
 #' @import org.Hs.eg.db
-#' @importFrom stringr paste0
+#'
 #' @param CNV Copy number variation data
 #'
-#' @return A matrix
+#' @return A CNV matrix.
 #' @export
 #'
 #' @examples
@@ -209,7 +212,7 @@ quantileNormalizeByFeature <- function(matrix_to_normalize,
 #' CNVmatrix <- cnvconverttomatrix(CNV)
 #'
 cnvconverttomatrix <-function(CNV){
-  pos = a
+  pos = CNV
   pos$Chrom = paste0("chr",pos$Chrom)
   peak <- GRanges(sample = pos[,1],
                   Segment_Mean = pos[,5],
@@ -224,3 +227,8 @@ cnvconverttomatrix <-function(CNV){
   matrix <- xtabs(Segment_Mean ~ SYMBOL +sample, pos_anno)
   return(matrix)
 }
+
+
+
+
+

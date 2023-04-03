@@ -15,7 +15,7 @@ quantileNormalizeByFeature(matrix_to_normalize, target_distribution_matrix)
 A normalized matrix
 }
 \description{
-A cross-platform normalization method using FSQN to improve comparability of DNA microarray and RNA-seq datasets
+A cross-platform normalization method using FSQN to improve comparability of DNA microarray and RNA-seq datasets.
 }
 \examples{
 set.seed(7)

@@ -10,20 +10,25 @@ Description: A multi-method is used to classify cancer subtypes and make the res
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 Imports:
-    dplyr (>= 1.0),
-    tidyr,
     ConsensusClusterPlus,
     impute,
     survival,
     survminer,
     limma,
     RColorBrewer,
-    stringr,
     org.Hs.eg.db,
     GenomicRanges,
     ChIPseeker,
-    TxDb.Hsapiens.UCSC.hg38.knownGene
+    TxDb.Hsapiens.UCSC.hg38.knownGene,
+    ggpubr,
+    igraph,
+    iCluster,
+    ggplot2,
+    IRanges,
+    pRRophetic,
+    preprocessCore,
+    S4Vectors
 Depends: 
     R (>= 2.10)

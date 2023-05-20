@@ -7,4 +7,4 @@ install.package("devtools")
 devtools::install_github("joanzz/CFC")
 ```
 # Usage
-You can learn more about his detailed features by visiting this website( https://joanzz.github.io/CFC/)
+You can learn more detail by visiting the website( https://joanzz.github.io/CFC/)
